@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="style.css" type="text/css" media="screen, projection" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <div id="header">
+        <h1>Keda's Math Helpers</h1>
+    </div><!-- #header-->
+
+    <div id="content">
+        <div>Choose: <select name="operator" id="operator"><option value="+">Addition</option><option
+                value="-">Subtraction</option></select> &nbsp; Number Range: <select name="max" id="max"><option
+                value="10">0-10</option><option value="20">0-20</option></select> &nbsp; <button id="start">Start</button></div>
+
+        <div id="image"></div>
+        <div id="problems"></div>
+        <div style="clear: both"></div>
+    </div><!-- #content-->
+
+    <div id="footer">
+        <strong>Keda's Math Helpers programmed by Daddy. I hope this helps my beautiful daughter learn addition and
+            subtraction.</strong>
+    </div><!-- #footer -->
+
+</div><!-- #wrapper -->
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#start').click(function(e) {
+        $('#image').empty();
+        $('#problems').empty();
+        var operator = $('#operator').val();
+        var maxNum = $('#max').val();
+        var first = 0;
+        var _first = 0;
+        var second = 0;
+        for (var i = 1; i < 11; i++) {
+            first = Math.round(Math.random() * maxNum);
+            second = Math.round(Math.random() * maxNum);
+            if (operator == '-' && first < second) {
+                _first = first;
+                first = second;
+                second = _first;
+            }
+            if (operator == '-' && second > 10) {
+                second = second - 10;
+            }
+            $('#problems').append('<div class="problem"><span class="first">' + first + '</span> ' + operator + ' <span class="second">' + second + '</span> = <input type="text" value="" size="3" class="answer"/></div>');
+        }
+    });
+    $('.answer').live('focusout', function(e) {
+        $('#image').empty();
+        var operator = $('#operator').val();
+        var first = parseInt($(this).parent().find('.first').html());
+        var second = parseInt($(this).parent().find('.second').html());
+        var correct = false;
+
+        if (operator == "+") {
+            if (first + second == this.value) {
+                correct = true;
+            }
+        } else {
+            if (first - second == this.value) {
+                correct = true;
+            }
+        }
+
+        if (correct) {
+            $.get('image.php', function(data) {
+                var imgNum = Math.round(Math.random()*images.length-1);
+                var img = new Image();
+                img.src = data;
+                img.width = 400;
+                img.height = 300;
+                $('#image').append(img);
+            }, 'html');
+        }
+    });
+});
+var images = [];
+images[0] = 'http://petcaregt.com/blog/wp-content/uploads/2010/05/communication-in-cats1.jpg';
+images[1] = 'http://1.bp.blogspot.com/-vapp29AXq6I/TfqEqHkMwQI/AAAAAAAABKE/5_wL54pLAGg/s1600/cat_cute3.jpg';
+images[2] = 'http://www.allerca.com/images/cats/ALHP3988776.jpg';
+images[3] = 'http://scaredycatsvet.com/greeneyedcat.jpg';
+images[4] = 'http://www.recipeapart.com/wp-content/uploads/2009/11/cute-cats-wallpaper-26.jpg';
+images[5] = 'http://www.picturesofcats4you.com/wp-content/uploads/2008/07/funny-cats-and-kittens-wallpapers-12.jpg';
+images[6] = 'http://www.photography-match.com/views/images/gallery/PLAY.jpg';
+images[7] = 'http://178.63.105.17/bulkupload/Animals/Cat/1//Cats/Adoptable%20Cats%20Happy%20Little%20Animals.jpg';
+images[8] = 'http://www.wallpapersgo.com/wp-content/uploads/2010/02/3-Cats.jpg';
+images[9] = 'http://muslimmedianetwork.com/mmn/windows-live-pictures/CatsandIslam_C53D/cats_012.jpg';
+images[10] = 'http://mobile.shareyourwallpaper.com/upload/wallpaper/animals/cats/cats_fdf77d77.jpg';
+images[11] = 'http://www.webdesign.org/img_articles/7072/BW-kitten.jpg';
+</script>
+
+</body>
+</html>
